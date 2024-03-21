@@ -1,21 +1,19 @@
 #!/home/daniel/selenium-py-demo/bin/python
 
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import os
+import math
+import shutil
+import pyotp
 import time
 
 start = time.time()
-
-import pyotp
-import shutil
-import math
-import os
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 # Delete browser cache if exists
 cache_dir = "./data/test"
@@ -138,7 +136,7 @@ for tf_file, res_list in test_resources.items():
     go_to_file_link = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR,
-            "div[data-component='ActionList.Item--DividerContainer']"))
+             "div[data-component='ActionList.Item--DividerContainer']"))
     )
     go_to_file_link.click()
 
