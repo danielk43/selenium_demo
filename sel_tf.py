@@ -1,4 +1,4 @@
-#!/home/daniel/selenium/bin/python
+#!/home/daniel/selenium-py-demo/bin/python
 
 import time
 
@@ -90,7 +90,7 @@ test_resources = {
         "vpc_rhel_security_group_id",
         "vpc_win_security_group_id"
     ],
-    "providers.tf": ["aws"],
+    "provider.tf": ["aws"],
     "variables.tf": [
         "aws_region",
         "azs",
@@ -111,19 +111,24 @@ for tf_file, res_list in test_resources.items():
              "button[aria-label='Open user account menu']"))
     )
     avatar_button.click()
-    
+
     repositories = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR, "a[href='/{}?tab=repositories']".format(
                 os.environ["GITHUB_USERNAME"])))
     )
     repositories.click()
-    
+
     # Open Terraform project
-    driver.implicitly_wait(10)
-    zscaler_repo = driver.find_element(By.LINK_TEXT, "zscaler-tf")
+    driver.implicitly_wait(5)
+    repos_filter = driver.find_element(By.ID, "your-repos-filter")
+    repos_filter.send_keys("zscaler-tf")
+    zscaler_repo = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.LINK_TEXT, "zscaler-tf"))
+    )
     zscaler_repo.click()
-    
+
     # Search file, load page
     go_to_file = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(
@@ -136,13 +141,13 @@ for tf_file, res_list in test_resources.items():
             "div[data-component='ActionList.Item--DividerContainer']"))
     )
     go_to_file_link.click()
-    
+
     # Verify file content contains resources
     driver.implicitly_wait(5)
     tf_content = driver.find_element(
         By.CSS_SELECTOR,
         "textarea[id='read-only-cursor-text-area']").get_attribute("value")
-    
+
     for resource in res_list:
         assert resource in tf_content
         print("found {} in {}".format(resource, tf_file))
