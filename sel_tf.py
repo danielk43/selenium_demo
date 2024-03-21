@@ -4,24 +4,24 @@ import time
 
 start = time.time()
 
-import os
-import math
-import shutil
 import pyotp
+import shutil
+import math
+import os
 
 from selenium import webdriver
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # Delete browser cache if exists
 cache_dir = "./data/test"
 
 if os.path.isdir(cache_dir):
-   shutil.rmtree(cache_dir) 
+    shutil.rmtree(cache_dir)
 
 options = webdriver.ChromeOptions()
 options.binary_location = r"./chrome-linux64/chrome"
@@ -49,7 +49,7 @@ wait_commit.until(lambda d: commit.is_displayed())
 
 driver.find_element(
     By.ID, "login_field").send_keys(
-        os.environ["GITHUB_USERNAME"])
+    os.environ["GITHUB_USERNAME"])
 driver.find_element(By.ID, "password").send_keys(os.environ["GITHUB_PASSWORD"])
 commit.click()
 
@@ -59,43 +59,93 @@ github_token = github_totp.now()
 driver.find_element(By.NAME, "app_otp").send_keys(github_token)
 print("GitHub Token = " + github_token)
 
-# Navigate to main repo menu
-avatar_button = driver.find_element(
-    By.CSS_SELECTOR,
-    "button[aria-label='Open user account menu']")
-avatar_button.click()
+test_resources = {
+    "backend.tf": ["s3"],
+    "ec2.tf": [
+        "latest-rhel8",
+        "latest-win22",
+        "ec2_instance"
+    ],
+    "outputs.tf": [
+        "ami_id_rhel8",
+        "ami_id_win22",
+        "vpc_rhel_id",
+        "vpc_win_id",
+        "vpc_rhel_priv_subnet_id1",
+        "vpc_rhel_priv_subnet_id2",
+        "vpc_rhel_priv_subnet_id3",
+        "vpc_rhel_priv_subnet_id4",
+        "vpc_rhel_pub_subnet_id1",
+        "vpc_rhel_pub_subnet_id2",
+        "vpc_rhel_pub_subnet_id3",
+        "vpc_rhel_pub_subnet_id4",
+        "vpc_win_priv_subnet_id1",
+        "vpc_win_priv_subnet_id2",
+        "vpc_win_priv_subnet_id3",
+        "vpc_win_priv_subnet_id4",
+        "vpc_win_pub_subnet_id1",
+        "vpc_win_pub_subnet_id2",
+        "vpc_win_pub_subnet_id3",
+        "vpc_win_pub_subnet_id4",
+        "vpc_rhel_security_group_id",
+        "vpc_win_security_group_id"
+    ],
+    "providers.tf": ["aws"],
+    "variables.tf": [
+        "aws_region",
+        "azs",
+        "enable_nat_gateway",
+        "enable_vpn_gateway",
+        "manage_default_network_acl",
+        "vpcs",
+        "ec2s"
+    ],
+    "vpc.tf": ["vpc"]
+}
 
-repositories = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable(
-        (By.CSS_SELECTOR, "a[href='/{}?tab=repositories']".format(
-            os.environ["GITHUB_USERNAME"])))
-)
-repositories.click()
-
-# Open Terraform project
-driver.implicitly_wait(5)
-zscaler_repo = driver.find_element(By.LINK_TEXT, "zscaler-tf")
-zscaler_repo.click()
-
-# Search file, load page
-go_to_file = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable(
-        (By.CSS_SELECTOR, "input[aria-label='Go to file']"))
-)
-go_to_file.send_keys("ec2.tf")
-go_to_file_link = driver.find_element(
-    By.CSS_SELECTOR, "div[data-component='ActionList.Item--DividerContainer']"
-)
-go_to_file_link.click()
-
-# Verify file content contains resources
-driver.implicitly_wait(5)
-ec2_tf_content = driver.find_element(
-    By.CSS_SELECTOR,
-    "textarea[id='read-only-cursor-text-area']").get_attribute("value")
-
-for resource in ["latest-rhel8", "latest-win22", "ec2_instance"]:
-    assert resource in ec2_tf_content
+for tf_file, res_list in test_resources.items():
+    # Navigate to main repo menu
+    avatar_button = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR,
+             "button[aria-label='Open user account menu']"))
+    )
+    avatar_button.click()
+    
+    repositories = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "a[href='/{}?tab=repositories']".format(
+                os.environ["GITHUB_USERNAME"])))
+    )
+    repositories.click()
+    
+    # Open Terraform project
+    driver.implicitly_wait(10)
+    zscaler_repo = driver.find_element(By.LINK_TEXT, "zscaler-tf")
+    zscaler_repo.click()
+    
+    # Search file, load page
+    go_to_file = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, "input[aria-label='Go to file']"))
+    )
+    go_to_file.send_keys(tf_file)
+    go_to_file_link = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR,
+            "div[data-component='ActionList.Item--DividerContainer']"))
+    )
+    go_to_file_link.click()
+    
+    # Verify file content contains resources
+    driver.implicitly_wait(5)
+    tf_content = driver.find_element(
+        By.CSS_SELECTOR,
+        "textarea[id='read-only-cursor-text-area']").get_attribute("value")
+    
+    for resource in res_list:
+        assert resource in tf_content
+        print("found {} in {}".format(resource, tf_file))
 
 # Print success and exit
 print("Terraform test passed in %s seconds" % round((time.time() - start), 3))
