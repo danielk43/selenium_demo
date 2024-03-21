@@ -41,14 +41,11 @@ service = Service("./chromedriver-linux64/chromedriver")
 driver = webdriver.Chrome(options=options, service=service)
 driver.get("https://github.com/login")
 
-commit = driver.find_element(By.NAME, "commit")
-wait_commit = WebDriverWait(driver, timeout=2)
-wait_commit.until(lambda d: commit.is_displayed())
-
 driver.find_element(
     By.ID, "login_field").send_keys(
     os.environ["GITHUB_USERNAME"])
 driver.find_element(By.ID, "password").send_keys(os.environ["GITHUB_PASSWORD"])
+commit = driver.find_element(By.NAME, "commit")
 commit.click()
 
 github_totp = pyotp.TOTP(os.environ["GITHUB_TOTP"])
