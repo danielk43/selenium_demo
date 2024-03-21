@@ -78,7 +78,7 @@ zscaler_repo = driver.find_element(By.LINK_TEXT, "zscaler-tf")
 zscaler_repo.click()
 
 # Search file, load page
-go_to_file = WebDriverWait(driver, 20).until(
+go_to_file = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable(
         (By.CSS_SELECTOR, "input[aria-label='Go to file']"))
 )
@@ -89,6 +89,7 @@ go_to_file_link = driver.find_element(
 go_to_file_link.click()
 
 # Verify file content contains resources
+driver.implicitly_wait(5)
 ec2_tf_content = driver.find_element(
     By.CSS_SELECTOR,
     "textarea[id='read-only-cursor-text-area']").get_attribute("value")
