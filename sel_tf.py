@@ -1,4 +1,4 @@
-#!/home/daniel/selenium-py-demo/bin/python
+#!/home/daniel/python/selenium-py-demo/bin/python
 
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
