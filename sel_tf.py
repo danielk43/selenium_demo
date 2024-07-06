@@ -34,11 +34,10 @@ options.add_argument("--disable-setuid-sandbox")
 options.add_argument("--user-data-dir={}".format(cache_dir))
 options.add_experimental_option(
     "prefs", {"profile.managed_default_content_settings.images": 2})
-
 service = Service("./chromedriver-linux64/chromedriver")
+driver = webdriver.Chrome(options=options, service=service)
 
 # Log into GitHub account with 2FA
-driver = webdriver.Chrome(options=options, service=service)
 driver.get("https://github.com/login")
 
 driver.find_element(
