@@ -103,7 +103,7 @@ for tf_file, res_list in test_resources.items():
     avatar_button = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(
             (By.CSS_SELECTOR,
-             "button[aria-label='Open user account menu']"))
+             "button[aria-label='Open user navigation menu']"))
     )
     avatar_button.click()
 
