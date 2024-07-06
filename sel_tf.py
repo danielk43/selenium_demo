@@ -21,6 +21,7 @@ cache_dir = "./data/test"
 if os.path.isdir(cache_dir):
     shutil.rmtree(cache_dir)
 
+# Configure webdriver
 options = webdriver.ChromeOptions()
 options.binary_location = r"./chrome-linux64/chrome"
 options.add_argument("--remote-debugging-port=9222")
@@ -53,6 +54,7 @@ github_token = github_totp.now()
 driver.find_element(By.NAME, "app_otp").send_keys(github_token)
 print("GitHub Token = " + github_token)
 
+# Add dict with substrings to validate
 test_resources = {
     "backend.tf": ["s3"],
     "ec2.tf": [
@@ -97,6 +99,7 @@ test_resources = {
     "vpc.tf": ["vpc"]
 }
 
+# Begin tests
 for tf_file, res_list in test_resources.items():
     # Navigate to main repo menu
     avatar_button = WebDriverWait(driver, 10).until(
