@@ -1,11 +1,12 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-// using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
+using System.Diagnostics;
 // using System.Drawing;
 using System.IO;
  
@@ -17,9 +18,26 @@ namespace Publix
         IWebDriver webDriver;
         public void Init_Browser()
         {
+            ProcessStartInfo startInfo = new ProcessStartInfo() {
+                FileName = "/chrome-linux64/chrome",
+                Arguments = "--version",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            Process proc = new Process() { StartInfo = startInfo, };
+            proc.Start();
+            string chromeMajorVersion = proc.StandardOutput.ReadToEnd().Split('.').First().Split(' ').Last();
+            proc.WaitForExit();
+
+            string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/"
+                             + chromeMajorVersion
+                             + ".0.0.0 Safari/537.36";
+
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("--headless", "--disable-gpu",
-                "--no-sandbox", "--disable-dev-shm-usage");
+            chromeOptions.AddArguments("--headless", "--disable-gpu", "--no-sandbox",
+                "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled",
+                $"--user-agent={userAgent}");
 
             var chromeService = ChromeDriverService.CreateDefaultService();
             chromeService.SuppressInitialDiagnosticInformation = true;
@@ -85,6 +103,10 @@ namespace Publix
         {
             browser.Goto(test_url);
  
+            // IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            // var ua = js.ExecuteScript("return navigator.userAgent");
+            // Console.WriteLine("User Agent: " + ua);
+
             IWebElement FlyOut = driver.FindElement(By.CssSelector("div.club-publix-flyout"));
             Assert.IsTrue(FlyOut.Displayed);
 
@@ -102,39 +124,43 @@ namespace Publix
 
             browser.Goto(LogInHref);
 
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
-            wait.Until(ExpectedConditions.ElementExists(By.Id("signInName")));
-            driver.FindElement(By.Id("signInName")).SendKeys(LOGIN_USER);
-            driver.FindElement(By.Id("password")).SendKeys(LOGIN_PASS);
+            IWebElement Username = driver.FindElement(By.Id("signInName"));
+            IWebElement Password = driver.FindElement(By.Id("password"));
+            IWebElement LoginButton = driver.FindElement(By.Id("next"));
+            Username.SendKeys(LOGIN_USER);
+            Password.SendKeys(LOGIN_PASS);
+            LoginButton.Click();
 
-            IWebElement LogInButton = driver.FindElement(By.Id("next"));
-            // LogInButton.Click();
+            // System.Threading.Thread.Sleep(10000);
 
-            /* Failed login attempts
-            LogInButton.SendKeys(Keys.Tab);
-            LogInButton.SendKeys(Keys.Enter);
+            /* Alternate login attempts 
+            Password.SendKeys(Keys.Enter);
+
+            IWebElement LoginButton = driver.FindElement(By.Id("next"));
+
+            LoginButton.SendKeys(Keys.Tab);
+            LoginButton.SendKeys(Keys.Enter);
 
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            js.ExecuteScript("arguments[0].click();", LogInButton);
+            js.ExecuteScript("arguments[0].click();", LoginButton);
 
-            Actions login = new Actions(driver).MoveToElement(LogInButton).Pause(TimeSpan.FromSeconds(3));
-            login.Click();
-
-            Actions action = new Actions(driver);
-            action.SendKeys(LogInButton, Keys.Tab);
-            action.SendKeys(Keys.Enter);
+            Actions login = new Actions(driver).MoveToElement(LoginButton).Pause(TimeSpan.FromSeconds(3));
+            login.Click().Perform();
             */
 
             Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
             screenshot.SaveAsFile(test_root+@"/Publix_loginpage.jpg");
 
-            // wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
-            // IWebElement UserAccount = driver.FindElement(By.Id("userAccount"));
+            /* Uncomment when bot detection is beaten
+            wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
+            IWebElement UserAccount = driver.FindElement(By.Id("userAccount"));
+            UserAccount.Click();
 
-            // wait.Until(ExpectedConditions.ElementExists(By.CssSelector("div[class='club-publix-sidebar']")));
+            wait.Until(ExpectedConditions.ElementExists(By.CssSelector("div[class='club-publix-sidebar']")));
 
-            // Screenshot screenshot2 = ((ITakesScreenshot)driver).GetScreenshot();
-            // screenshot2.SaveAsFile(test_root+@"/Publix_accountpage.jpg");
+            Screenshot screenshot2 = ((ITakesScreenshot)driver).GetScreenshot();
+            screenshot2.SaveAsFile(test_root+@"/Publix_accountpage.jpg");
+            */
         }
 
         [TearDown]
