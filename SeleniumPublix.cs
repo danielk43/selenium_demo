@@ -108,7 +108,7 @@ namespace Publix
             Assert.IsTrue(FlyOut.Displayed);
 
             Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/Publix_frontpage_" + epoch + ".jpg");
+            screenshot.SaveAsFile(test_root + @"/" + epoch + "_Publix_frontpage.jpg");
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace Publix
             */
 
             Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/Publix_loginpage_" + epoch + ".jpg");
+            screenshot.SaveAsFile(test_root + @"/" + epoch + "_Publix_loginpage.jpg");
 
             /* Uncomment when bot detection is beaten
             wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
