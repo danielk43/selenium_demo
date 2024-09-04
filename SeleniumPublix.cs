@@ -19,7 +19,7 @@ namespace Publix
         public void Init_Browser()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo() {
-                FileName = "/chrome-linux64/chrome",
+                FileName = "/opt/chrome-linux64/chrome",
                 Arguments = "--version",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

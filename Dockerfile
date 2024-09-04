@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim
+FROM debian:bookworm-slim
 
 ARG UID=9876
 ARG USER=sdk_user
@@ -66,14 +66,20 @@ RUN addgroup --gid ${UID} ${USER} \
                                            wget \
                                            xdg-utils \
                                            xvfb \
+ && curl -LO https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb \
+ && dpkg -i packages-microsoft-prod.deb \
+ && apt update \
+ && apt install -y dotnet-sdk-8.0 \
+                   aspnetcore-runtime-8.0 \
+ && dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet/https.crt --format PEM \
+ && update-ca-certificates \
  && CHROME_STABLE_BROWSER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chrome[] | select(.platform == "linux64").url') \
  && CHROME_STABLE_DRIVER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64").url') \
  && curl -LO ${CHROME_STABLE_BROWSER} \
  && curl -LO ${CHROME_STABLE_DRIVER} \
  && unzip ${CHROME_STABLE_BROWSER##*/} -d /opt \
  && unzip ${CHROME_STABLE_DRIVER##*/} -d /opt \
- && dotnet tool install --tool-path /usr/local/bin dotnet-repl \
- && rm -rf /var/cache/apt/* *.zip \
+ && rm -rf /var/cache/apt/* *.deb *.zip \
  && chown -R ${USER}: ${HOME}
 
 CMD ["/bin/bash", "startup.sh"]
