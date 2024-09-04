@@ -12,7 +12,7 @@ ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_NOLOGO=1
 ENV LOGIN_USER=$LOGIN_USER
 ENV LOGIN_PASS=$LOGIN_PASS
-ENV PATH="$PATH:/chrome-linux64:/chromedriver-linux64"
+ENV PATH="$PATH:/opt/chrome-linux64:/opt/chromedriver-linux64"
 
 COPY startup.sh startup.sh
 
@@ -70,8 +70,9 @@ RUN addgroup --gid ${UID} ${USER} \
  && CHROME_STABLE_DRIVER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64").url') \
  && curl -LO ${CHROME_STABLE_BROWSER} \
  && curl -LO ${CHROME_STABLE_DRIVER} \
- && unzip ${CHROME_STABLE_BROWSER##*/} -d / \
- && unzip ${CHROME_STABLE_DRIVER##*/} -d / \
+ && unzip ${CHROME_STABLE_BROWSER##*/} -d /opt \
+ && unzip ${CHROME_STABLE_DRIVER##*/} -d /opt \
+ && dotnet tool install --tool-path /usr/local/bin dotnet-repl \
  && rm -rf /var/cache/apt/* *.zip \
  && chown -R ${USER}: ${HOME}
 
