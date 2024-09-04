@@ -1,0 +1,11 @@
+bin/
+obj/
+*.cache/
+*.config/
+*.dotnet/
+*.local/
+*.nuget/
+*.pki/
+*.vscode/
+*.jpg
+*.png
