@@ -37,7 +37,7 @@ namespace Publix
 
             // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("--headless", "--disable-gpu", "--no-sandbox",
+            chromeOptions.AddArguments("--headless=new", "--disable-gpu", "--no-sandbox",
                 "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled",
                 $"--user-agent={userAgent}");
 
