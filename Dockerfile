@@ -79,6 +79,8 @@ RUN addgroup --gid ${UID} ${USER} \
  && curl -LO ${CHROME_STABLE_DRIVER} \
  && unzip ${CHROME_STABLE_BROWSER##*/} -d /opt \
  && unzip ${CHROME_STABLE_DRIVER##*/} -d /opt \
+ && chromedriver_var=$(LC_ALL=C tr -dc A-Za-z </dev/urandom | head -c 26)_ \
+ && sed -i "s/cdc_.*_/${chromedriver_var}/g" /opt/chromedriver-linux64/chromedriver \
  && rm -rf /var/cache/apt/* *.deb *.zip \
  && chown -R ${USER}: ${HOME}
 

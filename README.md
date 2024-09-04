@@ -12,7 +12,7 @@ docker run --rm -it -v $PWD:/data chrome-dotnet dotnet test -v m
 This is a demo project and is not expected to be scalable or meant for production use  
 For example, credentials should never be built into an image but provided by CICD, K8s, Secrets Manager, etc  
 
-TODO: Anti bot mitigation. Publix is blocking automated login, find correct syntax for [these](https://www.zenrows.com/blog/selenium-avoid-bot-detection#disable-automation-indicator-webdriver-flags) experimental options in [CSharp](https://stackoverflow.com/a/63624756) Selenium
+TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions, look for others. Fix non-headless mode.
 
 ## Debug
 For C#/F# debugging, run a container and install the dotnet-repl shell
@@ -23,11 +23,10 @@ dotnet repl
 ```
 See the [project](https://github.com/jonsequitur/dotnet-repl) for more documentation
 
-## Credits / Useful Links
+## Additional Credits / Useful Links
 https://github.com/devpabloassis/seleniumdotnetcore  
 https://github.com/Hudrolax/uc-docker  
 https://github.com/janex-PL/DotnetSeleniumDockerRuntimeExample  
-https://github.com/jonsequitur/dotnet-repl  
 https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl  
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian  
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet  
