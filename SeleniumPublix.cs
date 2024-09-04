@@ -18,6 +18,7 @@ namespace Publix
         IWebDriver webDriver;
         public void Init_Browser()
         {
+            // Save Chrome major version so we can plug it into the useragent override
             ProcessStartInfo startInfo = new ProcessStartInfo() {
                 FileName = "/opt/chrome-linux64/chrome",
                 Arguments = "--version",
@@ -34,6 +35,7 @@ namespace Publix
                              + chromeMajorVersion
                              + ".0.0.0 Safari/537.36";
 
+            // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("--headless", "--disable-gpu", "--no-sandbox",
                 "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled",
@@ -64,6 +66,7 @@ namespace Publix
     }
     class Tests
     {
+        // Add some test resources and variables
         private static readonly string LOGIN_USER = Environment.GetEnvironmentVariable("LOGIN_USER");
         private static readonly string LOGIN_PASS = Environment.GetEnvironmentVariable("LOGIN_PASS");
 
@@ -73,6 +76,7 @@ namespace Publix
         string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
         IWebDriver driver;
  
+        // Initialize browser and run tests
         [SetUp]
         public void start_Browser()
         {
@@ -81,7 +85,7 @@ namespace Publix
         }
  
         [Test]
-        public void verifyLogo()
+        public void verify_01Logo()
         {
             browser.Goto(test_url);
 
@@ -90,7 +94,7 @@ namespace Publix
         }
  
         [Test]
-        public void verifyTouText()
+        public void verify_02TouText()
         {
             browser.Goto(test_url);
  
@@ -100,7 +104,7 @@ namespace Publix
         }
 
         [Test]
-        public void verifyFlyOut()
+        public void verify_03FlyOut()
         {
             browser.Goto(test_url);
  
@@ -112,7 +116,7 @@ namespace Publix
         }
 
         [Test]
-        public void verifyLogin()
+        public void verify_04Login()
         {
             browser.Goto(test_url);
  
