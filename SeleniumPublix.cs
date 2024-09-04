@@ -103,10 +103,6 @@ namespace Publix
         {
             browser.Goto(test_url);
  
-            // IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            // var ua = js.ExecuteScript("return navigator.userAgent");
-            // Console.WriteLine("User Agent: " + ua);
-
             IWebElement FlyOut = driver.FindElement(By.CssSelector("div.club-publix-flyout"));
             Assert.IsTrue(FlyOut.Displayed);
 
@@ -131,7 +127,7 @@ namespace Publix
             Password.SendKeys(LOGIN_PASS);
             LoginButton.Click();
 
-            // System.Threading.Thread.Sleep(10000);
+            System.Threading.Thread.Sleep(10000);
 
             /* Alternate login attempts 
             Password.SendKeys(Keys.Enter);
