@@ -3,7 +3,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim
 ARG UID=9876
 ARG USER=sdk_user
 ARG HOME=/data
-ARG PROJECT_NAME=publix
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LOGIN_USER
 ARG LOGIN_PASS
