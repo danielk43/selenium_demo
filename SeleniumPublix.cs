@@ -6,7 +6,7 @@ using OpenQA.Selenium.Support;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using System;
-using System.Drawing;
+// using System.Drawing;
 using System.IO;
  
 namespace Publix
