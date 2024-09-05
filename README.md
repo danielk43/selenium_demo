@@ -3,7 +3,7 @@ This project builds a Docker image with dotnet sdk 8.0 and the latest stable Chr
 Running the image with these .cs and .csproj files mounted will compile the project and execute NUnit framework testing  
 
 Logging into the Publix website is not supported in the curent config, so LOGIN_* build args can be skipped  
-Screen resolution default is 1920x1080 and can be ommitted also  
+Screen resolution default is 1920x1080 and can be omitted also  
 
 ```
 docker build \
@@ -16,10 +16,10 @@ docker build \
 
 docker run --rm -it -v $PWD:/data chrome-dotnet
 ```
-The startup script will initialize x11vnc to be able to run in non-headless mode which is beneficial for bot detection  
-Init steps throw some errors but don't affect the test run ¯\\_ (ツ)_/¯  
+The startup script will initialize x11vnc to be able to run in non-headless mode which is useful as part of escaping bot detection  
+Init steps throw some errors but they don't affect the test run ¯\\_ (ツ)_/¯  
 
-The default entrypoint arg is `dotnet test -v n` but any arg can be passed to `docker run` which will execute with the non-root user after x11 init  
+The default entrypoint cmd is `dotnet test -v n` but any cmd can be passed as an arg to `docker run` which will execute with the non-root user after x11 init  
 
 Testing will change ownership recursively in the current directory. This is so the non-root user has write access  
 When finished, clean up the environment:  
@@ -31,7 +31,7 @@ git clean -ffdx
 This is a demo project and is not expected to be scalable or meant for production use  
 For example, credentials should never be built into an image but provided by CICD, K8s, Secrets Manager, etc  
 
-TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions, look for others. 
+TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions (in progress), look for others. 
 
 ## Debug
 For C#/F# debugging, run a container and install the dotnet-repl shell  
@@ -49,12 +49,12 @@ https://github.com/janex-PL/DotnetSeleniumDockerRuntimeExample
 https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl  
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian  
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet  
-https://peter.sh/experiments/chromium-command-line-switches
+https://peter.sh/experiments/chromium-command-line-switches  
 https://stackoverflow.com/questions/23679283  
 https://stackoverflow.com/questions/2883576  
 https://stackoverflow.com/questions/4291912  
 https://stackoverflow.com/questions/4603911  
-https://stackoverflow.com/questions/55012929
+https://stackoverflow.com/questions/55012929  
 https://stackoverflow.com/questions/58651526  
 https://stackoverflow.com/questions/6229769  
 https://www.automatetheplanet.com/selenium-webdriver-csharp-cheat-sheet  
