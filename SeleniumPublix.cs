@@ -76,7 +76,7 @@ namespace Publix
         Browser_ops browser = new Browser_ops();
         String test_url = "https://www.publix.com";
         string test_root = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-        string epoch = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+        string test_time = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
         IWebDriver driver;
  
         // Initialize browser and run tests
@@ -115,7 +115,7 @@ namespace Publix
             Assert.IsTrue(FlyOut.Displayed);
 
             Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/" + epoch + "_Publix_frontpage.jpg");
+            screenshot.SaveAsFile(test_root + @"/" + test_time + "_Publix_frontpage.jpg");
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace Publix
             */
 
             Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/" + epoch + "_Publix_loginpage.jpg");
+            screenshot.SaveAsFile(test_root + @"/" + test_time + "_Publix_loginpage.jpg");
 
             /* Uncomment when bot detection is beaten
             wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
