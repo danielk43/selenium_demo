@@ -6,17 +6,22 @@ ARG HOME=/data
 ARG DEBIAN_FRONTEND=noninteractive
 ARG LOGIN_USER
 ARG LOGIN_PASS
+ARG SCREEN_HEIGHT=1080
+ARG SCREEN_WIDTH=1920
 
+ENV DISPLAY=:99
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_NOLOGO=1
 ENV LOGIN_USER=$LOGIN_USER
 ENV LOGIN_PASS=$LOGIN_PASS
 ENV PATH="$PATH:/opt/chrome-linux64:/opt/chromedriver-linux64"
-
-COPY startup.sh startup.sh
+ENV SCREEN_HEIGHT=$SCREEN_HEIGHT
+ENV SCREEN_WIDTH=$SCREEN_WIDTH
 
 WORKDIR $HOME
+
+COPY startup.sh startup.sh
 
 RUN addgroup --gid ${UID} ${USER} \
  && adduser --home ${HOME} --shell /sbin/nologin \
@@ -64,8 +69,11 @@ RUN addgroup --gid ${UID} ${USER} \
                                            lsb-release \
                                            unzip \
                                            wget \
+                                           x11vnc \
                                            xdg-utils \
                                            xvfb \
+ && mkdir /root/.vnc \
+ && x11vnc -storepasswd 1234 /root/.vnc/passwd \
  && curl -LO https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb \
  && dpkg -i packages-microsoft-prod.deb \
  && apt update \
@@ -84,4 +92,6 @@ RUN addgroup --gid ${UID} ${USER} \
  && rm -rf /var/cache/apt/* *.deb *.zip \
  && chown -R ${USER}: ${HOME}
 
-CMD ["/bin/bash", "startup.sh"]
+ENTRYPOINT ["/bin/bash", "startup.sh"]
+
+CMD ["dotnet", "test", "--verbosity", "normal"]

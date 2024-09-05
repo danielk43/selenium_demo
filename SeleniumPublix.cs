@@ -35,18 +35,21 @@ namespace Publix
                              + chromeMajorVersion
                              + ".0.0.0 Safari/537.36";
 
+            // Get screen resolution from environment
+            string screen_height = Environment.GetEnvironmentVariable("SCREEN_HEIGHT");
+            string screen_width  = Environment.GetEnvironmentVariable("SCREEN_WIDTH");
+
             // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
-            chromeOptions.AddArguments("--headless=new", "--disable-gpu", "--no-sandbox",
-                "--disable-dev-shm-usage", "--disable-blink-features=AutomationControlled",
-                $"--user-agent={userAgent}");
+            chromeOptions.AddArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
+                "--disable-blink-features=AutomationControlled", $"--user-agent='{userAgent}'",
+                $"--window-size={screen_width},{screen_height}");
 
             var chromeService = ChromeDriverService.CreateDefaultService();
             chromeService.SuppressInitialDiagnosticInformation = true;
 
             webDriver = new ChromeDriver(chromeService,chromeOptions);
             webDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
-            webDriver.Manage().Window.Maximize();
         }
 
         public void Goto(string url)
