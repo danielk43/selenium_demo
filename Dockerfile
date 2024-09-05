@@ -92,6 +92,8 @@ RUN addgroup --gid ${UID} ${USER} \
  && rm -rf /var/cache/apt/* *.deb *.zip \
  && chown -R ${USER}: ${HOME}
 
+EXPOSE 5900
+
 ENTRYPOINT ["/bin/bash", "startup.sh"]
 
 CMD ["dotnet", "test", "--verbosity", "normal"]
