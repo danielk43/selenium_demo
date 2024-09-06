@@ -85,6 +85,8 @@ namespace Publix
         {
             browser.Init_Browser();
             driver = browser.getDriver;
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("Object.defineProperty(navigator, 'platform', {get: () => 'Win64'})");
         }
  
         [Test]
