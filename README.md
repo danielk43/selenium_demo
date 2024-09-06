@@ -50,13 +50,14 @@ https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl
 https://learn.microsoft.com/en-us/dotnet/core/install/linux-debian  
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet  
 https://peter.sh/experiments/chromium-command-line-switches  
-https://stackoverflow.com/questions/23679283  
 https://stackoverflow.com/questions/2883576  
 https://stackoverflow.com/questions/4291912  
 https://stackoverflow.com/questions/4603911  
+https://stackoverflow.com/questions/6229769  
+https://stackoverflow.com/questions/15310110  
+https://stackoverflow.com/questions/23679283  
 https://stackoverflow.com/questions/55012929  
 https://stackoverflow.com/questions/58651526  
-https://stackoverflow.com/questions/6229769  
 https://www.automatetheplanet.com/selenium-webdriver-csharp-cheat-sheet  
 https://www.lambdatest.com/blog/findelements-in-selenium-c-sharp  
 https://www.lambdatest.com/blog/nunit-testing-tutorial-for-selenium-csharp  

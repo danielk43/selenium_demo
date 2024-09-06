@@ -36,14 +36,14 @@ namespace Publix
                              + ".0.0.0 Safari/537.36";
 
             // Get screen resolution from environment
-            string screen_height = Environment.GetEnvironmentVariable("SCREEN_HEIGHT");
-            string screen_width  = Environment.GetEnvironmentVariable("SCREEN_WIDTH");
+            string screenHeight = Environment.GetEnvironmentVariable("SCREEN_HEIGHT");
+            string screenWidth  = Environment.GetEnvironmentVariable("SCREEN_WIDTH");
 
             // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
                 "--disable-blink-features=AutomationControlled", $"--user-agent='{userAgent}'",
-                $"--window-size={screen_width},{screen_height}");
+                $"--window-size={screenWidth},{screenHeight}");
 
             var chromeService = ChromeDriverService.CreateDefaultService();
             chromeService.SuppressInitialDiagnosticInformation = true;
@@ -70,6 +70,8 @@ namespace Publix
     class Tests
     {
         // Add some test resources and variables
+        int randsleep = new Random().Next(2,6);
+
         private static readonly string LOGIN_USER = Environment.GetEnvironmentVariable("LOGIN_USER");
         private static readonly string LOGIN_PASS = Environment.GetEnvironmentVariable("LOGIN_PASS");
 
@@ -130,12 +132,24 @@ namespace Publix
 
             browser.Goto(LogInHref);
 
-            IWebElement Username = driver.FindElement(By.Id("signInName"));
-            IWebElement Password = driver.FindElement(By.Id("password"));
-            IWebElement LoginButton = driver.FindElement(By.Id("next"));
-            Username.SendKeys(LOGIN_USER);
-            Password.SendKeys(LOGIN_PASS);
-            LoginButton.Click();
+            IWebElement userName = driver.FindElement(By.Id("signInName"));
+            IWebElement passWord = driver.FindElement(By.Id("password"));
+            IWebElement loginButton = driver.FindElement(By.Id("next"));
+
+            System.Threading.Thread.Sleep(2000);
+
+            Actions Username = new Actions(driver).MoveToElement(userName).Pause(TimeSpan.FromSeconds(randsleep));
+            Username.Click().Perform();
+            userName.SendKeys(LOGIN_USER);
+            System.Threading.Thread.Sleep(randsleep);
+
+            Actions Password = new Actions(driver).MoveToElement(passWord).Pause(TimeSpan.FromSeconds(randsleep));
+            Password.Click().Perform();
+            passWord.SendKeys(LOGIN_PASS);
+            System.Threading.Thread.Sleep(randsleep);
+
+            Actions Login = new Actions(driver).MoveToElement(loginButton).Pause(TimeSpan.FromSeconds(randsleep));
+            Login.Click().Perform();
 
             System.Threading.Thread.Sleep(10000);
 
