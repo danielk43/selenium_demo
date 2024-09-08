@@ -136,7 +136,7 @@ namespace Publix
             IWebElement passWord = driver.FindElement(By.Id("password"));
             IWebElement loginButton = driver.FindElement(By.Id("next"));
 
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(5000);
 
             Actions Username = new Actions(driver).MoveToElement(userName).Pause(TimeSpan.FromSeconds(randsleep));
             Username.Click().Perform();
