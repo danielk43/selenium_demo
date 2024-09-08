@@ -81,8 +81,8 @@ RUN addgroup --gid ${UID} ${USER} \
                    aspnetcore-runtime-8.0 \
  && dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet/https.crt --format PEM \
  && update-ca-certificates \
- && CHROME_STABLE_BROWSER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chrome[] | select(.platform == "linux64").url') \
- && CHROME_STABLE_DRIVER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64").url') \
+ && CHROME_STABLE_BROWSER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chrome[] | select(.platform == "linux64") | .url') \
+ && CHROME_STABLE_DRIVER=$(curl -L https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json | jq -r '.channels.Stable.downloads.chromedriver[] | select(.platform == "linux64") | .url') \
  && curl -LO ${CHROME_STABLE_BROWSER} \
  && curl -LO ${CHROME_STABLE_DRIVER} \
  && unzip ${CHROME_STABLE_BROWSER##*/} -d /opt \
