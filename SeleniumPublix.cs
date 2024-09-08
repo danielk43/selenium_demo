@@ -13,7 +13,7 @@ using System.IO;
 namespace Publix
 
 {
-    public class Browser_ops
+    public class BrowserOps
     {
         IWebDriver webDriver;
         public void Init_Browser()
@@ -23,8 +23,7 @@ namespace Publix
                 FileName = "/opt/chrome-linux64/chrome",
                 Arguments = "--version",
                 UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardOutput = true
             };
             Process proc = new Process() { StartInfo = startInfo, };
             proc.Start();
@@ -35,9 +34,12 @@ namespace Publix
                              + chromeMajorVersion
                              + ".0.0.0 Safari/537.36";
 
-            // Get screen resolution from environment
+            // Set more reusable strings
             string screenHeight = Environment.GetEnvironmentVariable("SCREEN_HEIGHT");
             string screenWidth  = Environment.GetEnvironmentVariable("SCREEN_WIDTH");
+            string testRoot     = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            string testTime     = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+            string testUrl      = "https://www.publix.com";
 
             // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
@@ -77,10 +79,7 @@ namespace Publix
         private static readonly string LOGIN_USER = Environment.GetEnvironmentVariable("LOGIN_USER");
         private static readonly string LOGIN_PASS = Environment.GetEnvironmentVariable("LOGIN_PASS");
 
-        Browser_ops browser = new Browser_ops();
-        String test_url = "https://www.publix.com";
-        string test_root = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-        string test_time = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+        BrowserOps browser = new BrowserOps();
         IWebDriver driver;
  
         // Initialize browser and run tests
@@ -96,7 +95,7 @@ namespace Publix
         [Test]
         public void verify_01Logo()
         {
-            browser.Goto(test_url);
+            browser.Goto(testUrl);
 
             IWebElement Logo = driver.FindElement(By.CssSelector("img[alt='Publix']"));
             Assert.IsTrue(Logo.Displayed);
@@ -105,7 +104,7 @@ namespace Publix
         [Test]
         public void verify_02TouText()
         {
-            browser.Goto(test_url);
+            browser.Goto(testUrl);
  
             IWebElement TermsOfUse = driver.FindElement(By.XPath("//*[@class='tou-cookie-bar']/div/div/span"));
             Assert.IsTrue(TermsOfUse.Text.Contains("By using the Services, you agree to our terms,"));
@@ -115,19 +114,19 @@ namespace Publix
         [Test]
         public void verify_03FlyOut()
         {
-            browser.Goto(test_url);
+            browser.Goto(teUUrl);
  
             IWebElement FlyOut = driver.FindElement(By.CssSelector("div.club-publix-flyout"));
             Assert.IsTrue(FlyOut.Displayed);
 
-            Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/" + test_time + "_Publix_frontpage.jpg");
+            Screenshot frontPage = ((ITakesScreenshot)driver).GetScreenshot();
+            frontPage.SaveAsFile(testRoot + @"/" + testTime + "_Publix_frontpage.jpg");
         }
 
         [Test]
         public void verify_04Login()
         {
-            browser.Goto(test_url);
+            browser.Goto(testUrl);
  
             IWebElement LogIn = driver.FindElement(By.Id("userLogIn"));
             string LogInHref = LogIn.GetAttribute("href");
@@ -170,8 +169,8 @@ namespace Publix
             login.Click().Perform();
             */
 
-            Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot.SaveAsFile(test_root + @"/" + test_time + "_Publix_loginpage.jpg");
+            Screenshot loginPage = ((ITakesScreenshot)driver).GetScreenshot();
+            loginPage.SaveAsFile(testRoot + @"/" + testTime + "_Publix_loginpage.jpg");
 
             /* Uncomment when bot detection is beaten
             wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
@@ -181,7 +180,7 @@ namespace Publix
             wait.Until(ExpectedConditions.ElementExists(By.CssSelector("div[class='club-publix-sidebar']")));
 
             Screenshot screenshot2 = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot2.SaveAsFile(test_root+@"/Publix_accountpage.jpg");
+            screenshot2.SaveAsFile(testRoot+@"/Publix_accountpage.jpg");
             */
         }
 
