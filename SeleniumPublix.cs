@@ -16,6 +16,13 @@ namespace Publix
     public class BrowserOps
     {
         IWebDriver webDriver;
+
+        public string _testRoot = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+        public string testRoot
+        {
+            get { return this._testRoot; }
+        }
+
         public void Init_Browser()
         {
             // Save Chrome major version so we can plug it into the useragent override
@@ -37,15 +44,13 @@ namespace Publix
             // Set more reusable strings
             string screenHeight = Environment.GetEnvironmentVariable("SCREEN_HEIGHT");
             string screenWidth  = Environment.GetEnvironmentVariable("SCREEN_WIDTH");
-            string testRoot     = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-            string testTime     = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-            string testUrl      = "https://www.publix.com";
+            string testData     = $"{_testRoot}/userdata";
 
             // Set up Chromedriver and options for automated testing
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
                 "--disable-blink-features=AutomationControlled", $"--user-agent='{userAgent}'",
-                $"--window-size={screenWidth},{screenHeight}");
+                $"--user-data-dir={testData}", $"--window-size={screenWidth},{screenHeight}");
             chromeOptions.AddLocalStatePreference("prefs",
                 new { enabled_labs_experiments = new string[] { "profile.managed_default_content_settings.javascript@2" }});
 
@@ -78,6 +83,8 @@ namespace Publix
 
         private static readonly string LOGIN_USER = Environment.GetEnvironmentVariable("LOGIN_USER");
         private static readonly string LOGIN_PASS = Environment.GetEnvironmentVariable("LOGIN_PASS");
+        public string testTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+        public string testUrl  = "https://www.publix.com";
 
         BrowserOps browser = new BrowserOps();
         IWebDriver driver;
@@ -114,13 +121,13 @@ namespace Publix
         [Test]
         public void verify_03FlyOut()
         {
-            browser.Goto(teUUrl);
+            browser.Goto(testUrl);
  
             IWebElement FlyOut = driver.FindElement(By.CssSelector("div.club-publix-flyout"));
             Assert.IsTrue(FlyOut.Displayed);
 
             Screenshot frontPage = ((ITakesScreenshot)driver).GetScreenshot();
-            frontPage.SaveAsFile(testRoot + @"/" + testTime + "_Publix_frontpage.jpg");
+            frontPage.SaveAsFile(browser.testRoot + @"/" + testTime + "_Publix_frontpage.jpg");
         }
 
         [Test]
@@ -170,7 +177,7 @@ namespace Publix
             */
 
             Screenshot loginPage = ((ITakesScreenshot)driver).GetScreenshot();
-            loginPage.SaveAsFile(testRoot + @"/" + testTime + "_Publix_loginpage.jpg");
+            loginPage.SaveAsFile(browser.testRoot + @"/" + testTime + "_Publix_loginpage.jpg");
 
             /* Uncomment when bot detection is beaten
             wait.Until(ExpectedConditions.ElementExists(By.Id("userAccount")));
@@ -179,8 +186,8 @@ namespace Publix
 
             wait.Until(ExpectedConditions.ElementExists(By.CssSelector("div[class='club-publix-sidebar']")));
 
-            Screenshot screenshot2 = ((ITakesScreenshot)driver).GetScreenshot();
-            screenshot2.SaveAsFile(testRoot+@"/Publix_accountpage.jpg");
+            Screenshot accountPage = ((ITakesScreenshot)driver).GetScreenshot();
+            accountPage.SaveAsFile(browser.testRoot+@"/Publix_accountpage.jpg");
             */
         }
 

@@ -1,5 +1,6 @@
 bin/
 obj/
+userdata/
 .cache/
 .config/
 .dotnet/
