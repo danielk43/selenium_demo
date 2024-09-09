@@ -51,8 +51,8 @@ namespace Publix
             chromeOptions.AddArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
                 "--disable-blink-features=AutomationControlled", $"--user-agent='{userAgent}'",
                 $"--user-data-dir={testData}", $"--window-size={screenWidth},{screenHeight}");
-            chromeOptions.AddLocalStatePreference("prefs",
-                new { enabled_labs_experiments = new string[] { "profile.managed_default_content_settings.javascript@2" }});
+            chromeOptions.AddUserProfilePreference("managed_default_content_settings",
+                new { javascript = 2});
 
             var chromeService = ChromeDriverService.CreateDefaultService();
             chromeService.SuppressInitialDiagnosticInformation = true;
