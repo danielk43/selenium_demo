@@ -5,16 +5,23 @@ Running the image with these .cs and .csproj files mounted will compile the proj
 Logging into the Publix website is not supported in the curent config, so LOGIN_* build args can be skipped  
 Screen resolution default is 1920x1080 and can be omitted also  
 
+Pull the latest image from Dockerhub
 ```
-docker build \
---tag chrome-dotnet \
---build-arg LOGIN_USER=<user> \
---build-arg LOGIN_PASS=<password> \
---build-arg SCREEN_WIDTH=<screen_width> \
---build-arg SCREEN_HEIGHT=<screen_height> \
-.
-
-docker run --rm -it -v $PWD:/data chrome-dotnet
+docker pull danielk43/selenium_demo:latest
+```
+Or build it
+```
+docker build --tag selenium_demo .
+```
+And run where "image name" matches either the pulled img or local build
+```
+docker run --rm
+--env LOGIN_USER=<user> \
+--env LOGIN_PASS=<password> \
+--env SCREEN_WIDTH=<screen_width> \
+--env SCREEN_HEIGHT=<screen_height> \
+--volume $PWD:/data \
+<image name>
 ```
 The startup script will initialize x11vnc to be able to run in non-headless mode which is useful as part of escaping bot detection  
 Init steps throw some errors but they don't affect the test run ¯\\_ (ツ)_/¯  
@@ -29,7 +36,6 @@ git clean -ffdx
 ```
 
 This is a demo project and is not expected to be scalable or meant for production use  
-For example, credentials should never be built into an image but provided by CICD, K8s, Secrets Manager, etc  
 
 TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions (in progress), look for others. 
 
