@@ -7,7 +7,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG SCREEN_HEIGHT=1080
 ARG SCREEN_WIDTH=1920
 
-ENV DISPLAY=:99
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_NOLOGO=1
@@ -26,9 +25,7 @@ RUN addgroup --gid ${UID} ${USER} \
     --disabled-password ${USER} --gecos "" \
  && apt update \
  && apt -y upgrade \
- && apt -y install --no-install-recommends ca-certificates chromium-driver curl x11vnc xauth xvfb \
- && mkdir /root/.vnc \
- && x11vnc -storepasswd 1234 /root/.vnc/passwd \
+ && apt -y install --no-install-recommends ca-certificates chromium-driver curl xauth xvfb \
  && curl -LO https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb \
  && dpkg -i packages-microsoft-prod.deb \
  && apt update \
@@ -40,8 +37,6 @@ RUN addgroup --gid ${UID} ${USER} \
  && rm -rf /var/cache/apt/* *.deb \
  && chown -R ${USER}: ${HOME}
 
-EXPOSE 5900
-
 ENTRYPOINT ["/bin/bash", "startup.sh"]
 
-CMD ["dotnet", "test", "--verbosity", "normal"]
+CMD ["xvfb-run", "dotnet", "test", "--verbosity", "normal"]
