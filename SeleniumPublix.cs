@@ -27,7 +27,7 @@ namespace Publix
         {
             // Save Chrome major version so we can plug it into the useragent override
             ProcessStartInfo startInfo = new ProcessStartInfo() {
-                FileName = "/opt/chrome-linux64/chrome",
+                FileName = "/usr/bin/chromium",
                 Arguments = "--version",
                 UseShellExecute = false,
                 RedirectStandardOutput = true

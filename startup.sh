@@ -17,7 +17,7 @@ chown -R sdk_user: /data
 echo "CMD=${@}"
 
 # Print Chrome version
-chrome --version
+chromium --version
 
 # Compile and run NUnit tests
 # Or pass non-default cmds as args
