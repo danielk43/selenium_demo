@@ -34,6 +34,7 @@ RUN addgroup --gid ${UID} ${USER} \
  && update-ca-certificates \
  && chromedriver_var=$(LC_ALL=C tr -dc A-Za-z </dev/urandom | head -c 26)_ \
  && sed -i "s/cdc_.*_/${chromedriver_var}/g" /usr/bin/chromedriver \
+ && apt autoclean \
  && rm -rf /var/cache/apt/* *.deb \
  && chown -R ${USER}: ${HOME}
 
