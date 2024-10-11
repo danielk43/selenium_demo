@@ -30,7 +30,7 @@ RUN addgroup --gid ${UID} ${USER} \
  && dpkg -i packages-microsoft-prod.deb \
  && apt update \
  && apt install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0 \
- && dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet/https.crt --format PEM \
+ && dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet.crt --format PEM \
  && update-ca-certificates \
  && chromedriver_var=$(LC_ALL=C tr -dc A-Za-z </dev/urandom | head -c 26)_ \
  && sed -i "s/cdc_.*_/${chromedriver_var}/g" /usr/bin/chromedriver \
