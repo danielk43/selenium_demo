@@ -1,5 +1,5 @@
 ## Usage
-This project builds a Docker image with dotnet sdk 8.0 and the latest stable Chrome for Testing version  
+This project builds a Docker image with dotnet sdk 8.0 and the latest stable Chromium and driver version  
 Running the image with these .cs and .csproj files mounted will compile the project and execute NUnit framework testing  
 
 Logging into the Publix website is not supported in the curent config, so LOGIN_* build args can be skipped  
@@ -23,10 +23,7 @@ docker run --rm
 --volume $PWD:/data \
 <image name>
 ```
-The startup script will initialize x11vnc to be able to run in non-headless mode which is useful as part of escaping bot detection  
-Init steps throw some errors but they don't affect the test run ¯\\_ (ツ)_/¯  
-
-The default entrypoint cmd is `dotnet test -v n` but any cmd can be passed as an arg to `docker run` which will execute with the non-root user after x11 init  
+The default entrypoint cmd is `dotnet test -v n` but any cmd can be passed as an arg to `docker run` which will execute with the non-root user   
 
 Testing will change ownership recursively in the current directory. This is so the non-root user has write access  
 When finished, clean up the environment:  
@@ -40,7 +37,7 @@ This is a demo project and is not expected to be scalable or meant for productio
 TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions (in progress), look for others. 
 
 ## Debug
-For C#/F# debugging, run a container and install the dotnet-repl shell  
+For C#/F#/SQL debugging, run a container and install the dotnet-repl shell  
 ```
 docker run -it -v $PWD:/data chrome-dotnet bash
 dotnet tool install --tool-path /usr/local/bin dotnet-repl
