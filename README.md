@@ -1,27 +1,22 @@
 ## Usage
-This project builds a Docker image with dotnet sdk 8.0 and the latest stable Chromium and driver version  
-Running the image with these .cs and .csproj files mounted will compile the project and execute NUnit framework testing  
+This project builds a Docker image with dotnet sdk 9.0 and latest stable Chromium driver version  
+Run the image with these .cs and .csproj files mounted to compile and execute NUnit framework testing  
 
-Logging into the Publix website is not supported in the curent config, so LOGIN_* build args can be skipped  
-Screen resolution default is 1920x1080 and can be omitted also  
-
-Pull the latest image from Dockerhub
+Pull image from Dockerhub
 ```
 docker pull danielk43/selenium_dotnet:latest
 ```
-Or build it
+Or build it and run
+Environment variables can be skipped
 ```
 docker build --tag selenium_dotnet .
-```
-And run where "image name" matches either the pulled img or local build
-```
-docker run --rm
+docker run --rm \
 --env LOGIN_USER=<user> \
 --env LOGIN_PASS=<password> \
 --env SCREEN_WIDTH=<screen_width> \
 --env SCREEN_HEIGHT=<screen_height> \
 --volume $PWD:/data \
-<image name>
+selenium_dotnet
 ```
 The default entrypoint cmd is `dotnet test -v n` but any cmd can be passed as an arg to `docker run` which will execute with the non-root user   
 
@@ -32,7 +27,7 @@ sudo chown -R ${USER}: .
 git clean -ffdx
 ```
 
-TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions (in progress), look for others. 
+TODO: implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html)
 
 ## Debug
 For C#/F#/SQL debugging, run a container and install the dotnet-repl shell  

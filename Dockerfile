@@ -4,6 +4,7 @@ ARG UID=9876
 ARG USER=sdk_user
 ARG HOME=/data
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DOTNET_VERSION=9.0
 ARG SCREEN_HEIGHT=1080
 ARG SCREEN_WIDTH=1920
 
@@ -29,7 +30,7 @@ RUN addgroup --gid ${UID} ${USER} \
  && curl -LO https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb \
  && dpkg -i packages-microsoft-prod.deb \
  && apt update \
- && apt install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0 \
+ && apt install -y dotnet-sdk-"${DOTNET_VERSION}" aspnetcore-runtime-"${DOTNET_VERSION}" \
  && dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet.crt --format PEM \
  && update-ca-certificates \
  && chromedriver_var=$(LC_ALL=C tr -dc A-Za-z </dev/urandom | head -c 26)_ \
