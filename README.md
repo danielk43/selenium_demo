@@ -7,11 +7,11 @@ Screen resolution default is 1920x1080 and can be omitted also
 
 Pull the latest image from Dockerhub
 ```
-docker pull danielk43/selenium_demo:latest
+docker pull danielk43/selenium_dotnet:latest
 ```
 Or build it
 ```
-docker build --tag selenium_demo .
+docker build --tag selenium_dotnet .
 ```
 And run where "image name" matches either the pulled img or local build
 ```
@@ -31,8 +31,6 @@ When finished, clean up the environment:
 sudo chown -R ${USER}: .
 git clean -ffdx
 ```
-
-This is a demo project and is not expected to be scalable or meant for production use  
 
 TODO: Anti bot mitigation. Publix is blocking automated login; implement [these](https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html) suggestions (in progress), look for others. 
 
@@ -66,3 +64,4 @@ https://www.lambdatest.com/blog/findelements-in-selenium-c-sharp
 https://www.lambdatest.com/blog/nunit-testing-tutorial-for-selenium-csharp  
 https://www.nuget.org/packages  
 https://www.selenium.dev/selenium/docs/api/dotnet/index.html  
+
